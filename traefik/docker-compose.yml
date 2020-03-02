@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.1
+    container_name: traefik
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/traefik.yml:ro
+      - ./acme.json:/acme.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.tls.certresolver=gandi"
+      - "traefik.http.routers.api.tls.domains[0].main=${MAIN_DOMAIN}"
+      - "traefik.http.routers.api.tls.domains[0].sans=*.${MAIN_DOMAIN}"
+      # https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/#i-want-https-redirection-
+      # global redirect to https
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      # middleware redirect
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # make redirect permanent
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+      # auth
+      - "traefik.http.routers.api.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${APP_AUTH}"
+    environment:
+      - GANDIV5_API_KEY=${GANDIV5_API_KEY}

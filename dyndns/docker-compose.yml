@@ -1,0 +1,9 @@
+version: "3"
+services:
+  dyndns:
+    image: jbbodart/gandi-livedns
+    restart: always
+    environment:
+      - APIKEY=${APIKEY}
+      - RECORD_LIST=${RECORD_LIST}
+      - DOMAIN=${DOMAIN}

@@ -1,0 +1,18 @@
+location:
+  source_directories:
+    - /backup_data
+retention:
+  keep_daily: 7
+  keep_weekly: 4
+  keep_monthly: 6
+  keep_yearly: 1
+  prefix: "backup"
+storage:
+  archive_name_format: "backup-{now}"
+hooks:
+  on_error:
+    - echo "    Error during prune/create/check."
+  before_everything:
+    - echo "  Starting backup."
+  after_everything:
+    - echo "  Completed backup."
