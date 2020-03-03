@@ -1,5 +1,7 @@
 # monitoring
 
+![Architecture](architecture.png?raw=true)
+
 ## info
 
 * made up out of three services, two running in docker containers and one plain on the system
