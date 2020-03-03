@@ -56,7 +56,7 @@ The backup strategy heavily relies on [borgmatic](https://torsion.org/borgmatic/
   hostname=no-reply@domain.tld
   FromLineOverride=YES
   UseSTARTTLS=YES
-  AuthUser=no-reply@domain.tdl
+  AuthUser=no-reply@domain.tld
   AuthPass=secret
   # edit file /etc/ssmtp/revaliases and add the following content
   root:no-reply@domain.tld:mail.domain.tld:587
