@@ -3,3 +3,4 @@
 traefik/traefik.yml
 traefik/acme.json
 .cache
+.logs

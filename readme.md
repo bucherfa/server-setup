@@ -78,7 +78,8 @@ The backup strategy heavily relies on [borgmatic](https://torsion.org/borgmatic/
   ```bash
   crontab -e
   # insert the following line to the end of the file
-  0 4 * * * /path/to/setup/backup.sh | /usr/sbin/ssmtp cron@domain.tld
+  # it writes the output first into a log file and then sends the output to a given mail address
+  0 4 * * * cd /path/to/setup && ./backup.sh >> ./.logs/$(date -u +"\%Y-\%m-\%dT\%H:\%M:\%SZ").log && cat ./.logs/$(ls -t ./.logs | head -n1) | /usr/sbin/ssmtp cron@domain.tld
   ```
 
 ## notes
