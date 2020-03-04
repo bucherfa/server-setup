@@ -38,6 +38,14 @@ do
   end=`date +%s`
   echo "  "$(date -d@$((end-start)) -u +%H:%M:%S)
 done
+echo ""
+# Execute rclone
+echo "---"
+start=`date +%s`
+ssh $BORG_REPO_HOST "rclone sync $BORG_REPO_DIR $RCLONE_DESTINATION --transfers 32"
+end=`date +%s`
+echo "rclone... "$(date -d@$((end-start)) -u +%H:%M:%S)
+echo ""
 # Display repo sizes
 echo "---"
 echo $(ssh $BORG_REPO_HOST "cd $BORG_REPO_DIR && du -sh *")

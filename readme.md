@@ -37,13 +37,23 @@ sudo usermod -aG docker $USER #logout and login after this
 
 The backup strategy heavily relies on [borgmatic](https://torsion.org/borgmatic/) which in turn relies on [Borg](https://www.borgbackup.org/). Follow the steps below to set it up.
 
-* setup borg `>=1.0.8`  on a remote system
-  * for ubuntu you need to add an additional [PPA](https://launchpad.net/~costamagnagianfranco/+archive/ubuntu/borgbackup)
+* setup `borg >=1.0.8` and `rclone` on a remote system
+  * for `borg` on ubuntu you need to add an additional [PPA](https://launchpad.net/~costamagnagianfranco/+archive/ubuntu/borgbackup)
     ```bash
     sudo add-apt-repository ppa:costamagnagianfranco/borgbackup
     sudo apt update
-    sudo apt borgbackup
+    sudo apt install borgbackup
     ```
+  * for `rclone`
+    ```bash
+    sudo apt install rclone
+    # if the version is too old, install via generic install script from https://rclone.org/downloads/
+    ```
+* setup rclone
+  ```bash
+  rclone config # and follow guided configuration
+  # note: $NAME is used for rclone repo by default in backup.sh
+  ```
 * connect to the remote system at least once via ssh from your host machine to add it to `.ssh/know_hosts`
 * create a folder on the remote system where the `borgmatic` repos should be initialized
 * adjust the `.env` accordingly
