@@ -32,7 +32,7 @@ services:
       # make redirect permanent
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
       # auth
-      - "traefik.http.routers.api.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=${APP_AUTH}"
+      - "traefik.http.routers.api.middlewares=taauth"
+      - "traefik.http.middlewares.taauth.basicauth.users=${APP_AUTH}"
     environment:
       - GANDIV5_API_KEY=${GANDIV5_API_KEY}
