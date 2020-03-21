@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  app:
+    container_name: app
+    restart: always
+    image: gitea/gitea:1
+    volumes:
+      - app:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${SSH_PORT}:${SSH_PORT}
+    depends_on:
+      - db
+    networks:
+      - traefik_default
+      - default
+    environment:
+      - SSH_DOMAIN=${SSH_URL}
+      - SSH_PORT=${SSH_PORT}
+      - ROOT_URL=${APP_URL}
+      - DB_TYPE=${DB_TYPE}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_NAME}
+      - DB_PASSWD=${DB_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.gitea.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.gitea.entrypoints=websecure"
+      - "traefik.http.routers.gitea.tls=true"
+      - "traefik.http.services.gitea.loadbalancer.server.port=3000"
+  db:
+    container_name: gitea-db
+    restart: always
+    image: mysql:5.7
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - default
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_NAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+volumes:
+  app:
+  db:
+networks:
+  default:
+  traefik_default:
+    external: true
