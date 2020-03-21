@@ -19,7 +19,7 @@ services:
     networks:
       - default
   app:
-    build: ./build/app
+    image: nextcloud:apache
     restart: always
     volumes:
       - data:/var/www/html
@@ -33,17 +33,6 @@ services:
       - redis
     networks:
       - default
-  web:
-    build: ./build/web
-    restart: always
-    ports:
-      - ${APP_PORT}:80
-    volumes:
-      - data:/var/www/html
-    depends_on:
-      - app
-    networks:
-      - default
       - traefik_default
     labels:
       - "traefik.enable=true"
@@ -51,8 +40,9 @@ services:
       - "traefik.http.routers.nextcloud.rule=Host(`${APP_URL}`)"
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
       - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
   cron:
-    build: ./build/app
+    image: nextcloud:apache
     restart: always
     volumes:
       - data:/var/www/html
