@@ -26,6 +26,24 @@ services:
       - "traefik.http.routers.transmission.middlewares=auth-default"
     networks:
       - traefik_default
+  nginx:
+    image: nginx:stable
+    container_name: nginx
+    volumes:
+      - ./download.conf:/etc/nginx/conf.d/download.conf
+      - downloads:/var/www/downloads:ro
+    ports:
+      - 9092:80
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.transmission-downloads.rule=Host(`${DOWNLOAD_URL}`)"
+      - "traefik.http.routers.transmission-downloads.entrypoints=websecure"
+      - "traefik.http.routers.transmission-downloads.tls=true"
+      - "traefik.http.routers.transmission-downloads.middlewares=ipwhitelist-local"
+    networks:
+      - traefik_default
 volumes:
   config:
   downloads:
