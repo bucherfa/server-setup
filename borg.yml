@@ -1,6 +1,8 @@
 location:
   source_directories:
     - /backup_data
+  exclude_if_present:
+    - .nobackup
 retention:
   keep_daily: 7
   keep_weekly: 4
