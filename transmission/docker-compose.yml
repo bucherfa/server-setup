@@ -1,0 +1,35 @@
+version: "2.1"
+services:
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${APP_TIMEZONE}
+      - TRANSMISSION_WEB_HOME=/kettu/
+    volumes:
+      - config:/config
+      - downloads:/downloads
+      - watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.transmission.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.transmission.entrypoints=websecure"
+      - "traefik.http.routers.transmission.tls=true"
+      - "traefik.http.routers.transmission.middlewares=auth-default"
+    networks:
+      - traefik_default
+volumes:
+  config:
+  downloads:
+  watch:
+networks:
+  traefik_default:
+    external: true
