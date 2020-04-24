@@ -41,6 +41,12 @@ services:
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
       - "traefik.http.routers.nextcloud.tls=true"
       - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - "traefik.http.routers.nextcloud.middlewares=nc_headers,nc_redirect"
+      - "traefik.http.middlewares.nc_headers.headers.framedeny=true"
+      - "traefik.http.middlewares.nc_headers.headers.customFrameOptionsValue=SAMEORIGIN"
+      - "traefik.http.middlewares.nc_headers.headers.stsSeconds=15552000"
+      - "traefik.http.middlewares.nc_redirect.redirectregex.regex=/.well-known/(card|cal)dav"
+      - "traefik.http.middlewares.nc_redirect.redirectregex.replacement=/remote.php/dav/"
   cron:
     image: nextcloud:apache
     restart: always
