@@ -4,6 +4,7 @@ services:
     image: theconnman/docker-hub-rss:latest
     networks:
       - traefik_default
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_default"
