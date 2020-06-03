@@ -1,0 +1,36 @@
+version: '3'
+services:
+  app:
+    image: kawaaii/lolisafe:latest
+    container_name: lolisafe
+    environment:
+      - PRIVATE=${APP_PRIVATE}
+      - ENABLE_USER_ACCOUNTS=${APP_ENABLE_USER_ACCOUNTS}
+      - SERVE_FILES_WITH_NODE=${APP_SERVE_FILES_WITH_NODE}
+      - DOMAIN=https://${APP_URL}
+      - MAX_FILE_SIZE=${APP_MAX_FILE_SIZE}
+      - FILE_NAME_LENGTH=${APP_FILE_NAME_LENGTH}
+      - GENERATE_THUMBNAILS=${APP_GENERATE_THUMBNAILS}
+      - GENERATE_ZIPS=${APP_GENERATE_ZIPS}
+    volumes:
+      - db:/lolisafe/db
+      - uploads:/lolisafe/uploads
+      - logs:/lolisafe/logs
+    ports:
+      - ${APP_PORT}:3000
+    restart: always
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.quickfileshare.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.quickfileshare.entrypoints=websecure"
+      - "traefik.http.routers.quickfileshare.tls=true"
+volumes:
+  db:
+  uploads:
+  logs:
+networks:
+  traefik_default:
+    external: true
