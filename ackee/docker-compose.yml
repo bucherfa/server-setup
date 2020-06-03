@@ -1,0 +1,42 @@
+version: "3"
+services:
+  ackee:
+    image: electerious/ackee
+    container_name: ackee
+    restart: always
+    ports:
+      - "${APP_PORT}:3000"
+    environment:
+      - WAIT_HOSTS=mongo:27017
+      - ACKEE_MONGODB=mongodb://mongo:27017/ackee
+      - ACKEE_USERNAME=${APP_USERNAME}
+      - ACKEE_PASSWORD=${APP_PASSWORD}
+    depends_on:
+      - mongo
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.ackee.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.ackee.entrypoints=websecure"
+      - "traefik.http.routers.ackee.tls=true"
+      - "traefik.http.routers.ackee.middlewares=ackeeheaders"
+      - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolallowmethods=GET,POST,PATCH,OPTIONS"
+      - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolalloworigin=${APP_CORS_ORIGINS}"
+      - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolallowheaders=Content-Type"
+    networks:
+      - default
+      - traefik_default
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - data:/data/db
+    networks:
+      - default
+volumes:
+  data:
+networks:
+  default:
+  traefik_default:
+    external: true
