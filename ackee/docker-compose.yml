@@ -21,7 +21,7 @@ services:
       - "traefik.http.routers.ackee.tls=true"
       - "traefik.http.routers.ackee.middlewares=ackeeheaders"
       - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolallowmethods=GET,POST,PATCH,OPTIONS"
-      - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolalloworigin=${APP_CORS_ORIGINS}"
+      - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolalloworiginlist=${APP_CORS_ORIGINS}"
       - "traefik.http.middlewares.ackeeheaders.headers.accesscontrolallowheaders=Content-Type"
     networks:
       - default
