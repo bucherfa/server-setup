@@ -1,0 +1,56 @@
+version: "3"
+services:
+  synapse:
+    image: docker.io/matrixdotorg/synapse:latest
+    restart: always
+    # See the readme for a full documentation of the environment settings
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+      - TZ=${APP_TIMEZONE}
+    volumes:
+      - data:/data
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.matrix.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.matrix.entrypoints=websecure"
+      - "traefik.http.routers.matrix.tls=true"
+      - "traefik.http.services.matrix.loadbalancer.server.port=8008"
+    networks:
+      - default
+      - traefik_default
+  db:
+    image: docker.io/postgres:12-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=synapse
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      # ensure the database gets created correctly
+      # https://github.com/matrix-org/synapse/blob/master/docs/postgres.md#set-up-database
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - default
+  synapse-admin:
+    image: awesometechnologies/synapse-admin:latest
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.synapse-admin.rule=Host(`${ADMIN_URL}`)"
+      - "traefik.http.routers.synapse-admin.entrypoints=websecure"
+      - "traefik.http.routers.synapse-admin.tls=true"
+      - "traefik.http.services.synapse-admin.loadbalancer.server.port=80"
+      - "traefik.http.routers.synapse-admin.middlewares=ipwhitelist-local"
+    networks:
+      - traefik_default
+volumes:
+  data:
+  db:
+networks:
+  default:
+  traefik_default:
+    external: true
