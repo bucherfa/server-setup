@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_default"
       - "traefik.http.routers.matrix.rule=Host(`${APP_URL}`)"
-      - "traefik.http.routers.matrix.entrypoints=websecure"
+      - "traefik.http.routers.matrix.entrypoints=websecure,matrix"
       - "traefik.http.routers.matrix.tls=true"
       - "traefik.http.services.matrix.loadbalancer.server.port=8008"
     networks:

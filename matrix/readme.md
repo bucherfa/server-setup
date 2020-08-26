@@ -20,3 +20,5 @@ docker-compose up -d
 ## Setup
 
 for delegation use `caddy`.
+
+setup reverse proxy for port 8448 in `traefik`

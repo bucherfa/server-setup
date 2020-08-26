@@ -6,6 +6,9 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
+  # matrix federation port, only needed for matrix
+  matrix:
+    address: ":8448"
 
 providers:
   docker:
