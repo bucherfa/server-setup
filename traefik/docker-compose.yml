@@ -2,7 +2,7 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:v2.1
+    image: traefik:v2.3
     container_name: traefik
     restart: always
     ports:
@@ -22,6 +22,8 @@ services:
       - "traefik.http.routers.api.tls.certresolver=gandi"
       - "traefik.http.routers.api.tls.domains[0].main=${MAIN_DOMAIN}"
       - "traefik.http.routers.api.tls.domains[0].sans=*.${MAIN_DOMAIN}"
+      - "traefik.http.routers.api.tls.domains[1].main=${ALT_DOMAIN}"
+      - "traefik.http.routers.api.tls.domains[1].sans=*.${ALT_DOMAIN}"
       # https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/#i-want-https-redirection-
       # global redirect to https
       - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
