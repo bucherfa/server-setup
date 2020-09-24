@@ -18,6 +18,9 @@ do
   # Initialize repo
   BACKUP_INIT="$DRC_PART_START $DRC_PART_CUSTOM init --encryption repokey"
   eval $BACKUP_INIT
+  # Prune old archives
+  BACKUP_PRUNE="$DRC_PART_START $DRC_PART_CUSTOM prune"
+  eval $BACKUP_PRUNE
   # Stop containers
   docker-compose stop && echo "  Stopped Containers."
   # Get volume names
