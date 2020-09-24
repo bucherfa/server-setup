@@ -44,7 +44,7 @@ services:
       - "traefik.http.routers.synapse-admin.entrypoints=websecure"
       - "traefik.http.routers.synapse-admin.tls=true"
       - "traefik.http.services.synapse-admin.loadbalancer.server.port=80"
-      - "traefik.http.routers.synapse-admin.middlewares=ipwhitelist-local"
+      #- "traefik.http.routers.synapse-admin.middlewares=ipwhitelist-local"
     networks:
       - traefik_default
 volumes:
