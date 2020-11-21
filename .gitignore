@@ -5,3 +5,4 @@ traefik/acme.json
 .cache
 .logs
 caddy/Caddyfile
+.trash
