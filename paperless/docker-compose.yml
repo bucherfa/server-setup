@@ -1,0 +1,61 @@
+version: '3'
+services:
+  server:
+    image: thepaperlessproject/paperless:latest
+    ports:
+      - "${APP_PORT}:8000"
+    environment:
+      - PAPERLESS_OCR_LANGUAGES=
+      - PAPERLESS_DEBUG=${APP_DEBUG}
+      - PAPERLESS_SECRET_KEY=${APP_SECRET}
+      - TZ={APP_TIMEZONE}
+    command: ["gunicorn", "-b", "0.0.0.0:8000"]
+    restart: always
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ftp:/consume
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.paperless.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.paperless.entrypoints=websecure"
+      - "traefik.http.routers.paperless.tls=true"
+    networks:
+      - traefik_default
+  consumer:
+    image: thepaperlessproject/paperless:latest
+    environment:
+      - PAPERLESS_OCR_LANGUAGES=${APP_OCR_LANGS}
+      - PAPERLESS_DEBUG=${APP_DEBUG}
+      - PAPERLESS_SECRET_KEY=${APP_SECRET}
+      - TZ={APP_TIMEZONE}
+    restart: always
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ftp:/consume
+    command: ["document_consumer"]
+  ftp:
+    image: stilliard/pure-ftpd
+    container_name: pure-ftpd
+    ports:
+      - "10021:21"
+#      - "30000-30009:30000-30009"
+    volumes:
+      - ftp:/home/ftp/
+    environment:
+#      PUBLICHOST: :::10021
+      FTP_USER_NAME: ftp
+      FTP_USER_PASS: default
+      FTP_USER_HOME: /home/ftp/
+    restart: always
+#    network_mode: host
+volumes:
+  ftp:
+  data:
+  media:
+networks:
+#  defaut:
+  traefik_default:
+    external: true
