@@ -17,6 +17,12 @@ docker-compose down
 docker-compose up -d
 ```
 
+### Check Version
+
+```
+curl https://<domain.tld>/_matrix/federation/v1/version
+```
+
 ## Setup
 
 for delegation use `caddy`.
