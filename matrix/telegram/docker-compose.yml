@@ -1,0 +1,29 @@
+version: "3"
+services:
+  mautrix-telegram:
+    container_name: mautrix-telegram
+    image: dock.mau.dev/tulir/mautrix-telegram:v0.9.0
+    restart: unless-stopped
+    volumes:
+      - data:/data
+    networks:
+      - default
+      - matrix_bridges
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: mautrix
+      POSTGRES_DB: mautrix
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - default
+volumes:
+  data:
+  db:
+networks:
+  default:
+  matrix_bridges:
+    external: true
