@@ -84,6 +84,12 @@ The backup strategy heavily relies on [borgmatic](https://torsion.org/borgmatic/
 
 ## notes
 
+### list all images sorted by creation date
+
+```bash
+docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}" | sort -k 4
+```
+
 ### fritz.box
 
 * blocks all domains mapped to local ip addresses by default
