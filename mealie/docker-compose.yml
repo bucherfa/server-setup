@@ -1,0 +1,23 @@
+version: "3.1"
+services:
+  mealie:
+    container_name: mealie
+    image: hkotel/mealie:latest
+    restart: always
+    environment:
+      - TZ=${APP_TIMEZONE}
+    volumes:
+      - data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.mealie.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.mealie.entrypoints=websecure"
+      - "traefik.http.routers.mealie.tls=true"
+    networks:
+      - traefik_default
+volumes:
+  data:
+networks:
+  traefik_default:
+    external: true
