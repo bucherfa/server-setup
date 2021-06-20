@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: bitwardenrs/server:latest
+    image: vaultwarden/server:latest
     container_name: bitwarden
     ports:
       - ${APP_PORT}:80
