@@ -2,7 +2,7 @@ version: "3"
 services:
   mautrix-telegram:
     container_name: mautrix-telegram
-    image: dock.mau.dev/tulir/mautrix-telegram:v0.9.0
+    image: dock.mau.dev/tulir/mautrix-telegram:v0.10.0
     restart: unless-stopped
     volumes:
       - data:/data
