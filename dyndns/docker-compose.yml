@@ -7,3 +7,17 @@ services:
       - APIKEY=${APIKEY}
       - RECORD_LIST=${RECORD_LIST}
       - DOMAIN=${DOMAIN}
+  dyndns1:
+    image: jbbodart/gandi-livedns
+    restart: always
+    environment:
+      - APIKEY=${APIKEY}
+      - RECORD_LIST=${RECORD_LIST}
+      - DOMAIN=${DOMAIN1}
+  dyndns2:
+    image: jbbodart/gandi-livedns
+    restart: always
+    environment:
+      - APIKEY=${APIKEY}
+      - RECORD_LIST=${RECORD_LIST}
+      - DOMAIN=${DOMAIN2}
