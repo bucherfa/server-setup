@@ -26,6 +26,8 @@ services:
       - "traefik.http.routers.api.tls.domains[0].sans=*.${MAIN_DOMAIN}"
       - "traefik.http.routers.api.tls.domains[1].main=${ALT_DOMAIN}"
       - "traefik.http.routers.api.tls.domains[1].sans=*.${ALT_DOMAIN}"
+      - "traefik.http.routers.api.tls.domains[2].main=${ALT_DOMAIN2}"
+      - "traefik.http.routers.api.tls.domains[2].sans=*.${ALT_DOMAIN2}"
       # https://containo.us/blog/traefik-2-0-docker-101-fc2893944b9d/#i-want-https-redirection-
       # global redirect to https
       - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
