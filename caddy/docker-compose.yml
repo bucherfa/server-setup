@@ -10,10 +10,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_default"
-      - "traefik.http.routers.caddy.rule=Host(`${APP_URL}`, `${APP_URL2}`)"
+      - "traefik.http.routers.caddy.rule=Host(`${APP_URL}`, `${APP_URL1}`, `${APP_URL2}`)"
       - "traefik.http.routers.caddy.entrypoints=websecure"
       - "traefik.http.routers.caddy.tls=true"
       - "traefik.http.services.caddy.loadbalancer.server.port=80"
+      - "traefik.http.routers.caddy.middlewares=cors"
 networks:
   traefik_default:
     external: true
