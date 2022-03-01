@@ -6,5 +6,6 @@ for dir in $PWD/*/
 do
   dir=${dir%*/}
   cd $dir
+  echo "$dir..."
   docker run --rm -it --name dcv -v $(pwd):/input pmsipilot/docker-compose-viz render -f -o architecture.png -m image docker-compose.yml
 done
