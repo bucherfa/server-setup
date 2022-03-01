@@ -2,7 +2,7 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:v2.4
+    image: traefik:v2.5
     container_name: traefik
     restart: always
     ports:
@@ -42,5 +42,9 @@ services:
       - "traefik.http.middlewares.auth-default.basicauth.users=${APP_AUTH}"
       # ip whitelist
       - "traefik.http.middlewares.ipwhitelist-local.ipwhitelist.sourcerange=${LOCAL_IP_RANGE}"
+      # cors
+      - "traefik.http.middlewares.cors.headers.accessControlAllowOriginList=*"
+      - "traefik.http.middlewares.cors.headers.accessControlAllowHeaders=Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      - "traefik.http.middlewares.cors.headers.accessControlAllowMethods=GET, POST, PUT, DELETE, OPTIONS"
     environment:
       - GANDIV5_API_KEY=${GANDIV5_API_KEY}
