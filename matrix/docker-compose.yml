@@ -9,7 +9,6 @@ services:
       - TZ=${APP_TIMEZONE}
     volumes:
       - data:/data
-      - telegram_data:/bridges/telegram
     depends_on:
       - db
     labels:
@@ -22,7 +21,6 @@ services:
     networks:
       - default
       - traefik_default
-      - bridges
   db:
     image: docker.io/postgres:12-alpine
     restart: always
@@ -52,10 +50,7 @@ services:
 volumes:
   data:
   db:
-  telegram_data:
-    external: true
 networks:
   default:
   traefik_default:
     external: true
-  bridges:
