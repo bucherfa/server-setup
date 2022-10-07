@@ -1,0 +1,128 @@
+version: "3"
+services:
+  outline:
+    image: outlinewiki/outline:0.66.1
+    restart: always
+    networks:
+      - default
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.outline.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.outline.entrypoints=websecure"
+      - "traefik.http.routers.outline.tls=true"
+    depends_on:
+      - postgres
+      - redis
+      - storage
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - SECRET_KEY=${SECRET_KEY}
+      - UTILS_SECRET=${UTILS_SECRET}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - DATABASE_URL_TEST=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}-test
+      - DATABASE_CONNECTION_POOL_MIN=${DATABASE_CONNECTION_POOL_MIN}
+      - DATABASE_CONNECTION_POOL_MAX=${DATABASE_CONNECTION_POOL_MAX}
+      - PGSSLMODE=${PGSSLMODE}
+      - REDIS_URL=${REDIS_URL}
+      - URL=https://${APP_URL}
+      - PORT=3000
+      - COLLABORATION_URL=${COLLABORATION_URL}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_S3_UPLOAD_BUCKET_URL=https://${MINIO_URL}
+      - AWS_S3_UPLOAD_BUCKET_NAME=${AWS_S3_UPLOAD_BUCKET_NAME}
+      - AWS_S3_UPLOAD_MAX_SIZE=${AWS_S3_UPLOAD_MAX_SIZE}
+      - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET}
+      - OIDC_AUTH_URI=${OIDC_AUTH_URI}
+      - OIDC_TOKEN_URI=${OIDC_TOKEN_URI}
+      - OIDC_USERINFO_URI=${OIDC_USERINFO_URI}
+      - OIDC_USERNAME_CLAIM=${OIDC_USERNAME_CLAIM}
+      - OIDC_DISPLAY_NAME=${OIDC_DISPLAY_NAME}
+      - OIDC_SCOPES=${OIDC_SCOPES}
+      - ENABLE_UPDATES=${ENABLE_UPDATES}
+      - SMTP_HOST=${SMTP_HOST}  
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL}
+#      - SMTP_REPLY_EMAIL=${SMTP_REPLY_EMAIL}
+      - SMTP_TLS_CIPHERS=${SMTP_TLS_CIPHERS}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE}
+      - RATE_LIMITER_ENABLED=${RATE_LIMITER_ENABLED}
+      - RATE_LIMITER_REQUESTS=${RATE_LIMITER_REQUESTS}
+      - RATE_LIMITER_DURATION_WINDOW=${RATE_LIMITER_DURATION_WINDOW}
+  redis:
+    image: redis:7
+    restart: always
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+  postgres:
+    image: postgres:14
+    volumes:
+      - database:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "pg_isready -U user"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+  storage:
+    image: minio/minio:RELEASE.2022-10-02T19-29-29Z
+    entrypoint: sh
+    command: -c 'minio server /data --console-address ":9001"'
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - traefik_default
+    volumes:
+      - storage:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_SERVER_URL=https://${MINIO_URL}
+      - MINIO_BROWSER_REDIRECT_URL=https://${MINIO_CONSOLE_URL}
+      #- MINIO_BROWSER=${MINIO_BROWSER}
+      - MINIO_DOMAIN=${MINIO_URL}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.outline-minio.rule=Host(`${MINIO_URL}`)"
+      - "traefik.http.routers.outline-minio.entrypoints=websecure"
+      - "traefik.http.routers.outline-minio.tls=true"
+      - "traefik.http.routers.outline-minio.service=outline-minio"
+      - "traefik.http.services.outline-minio.loadbalancer.server.port=9000"
+      - "traefik.http.routers.outline-minio-console.rule=Host(`${MINIO_CONSOLE_URL}`)"
+      - "traefik.http.routers.outline-minio-console.entrypoints=websecure"
+      - "traefik.http.routers.outline-minio-console.tls=true"
+      - "traefik.http.routers.outline-minio-console.service=outline-minio-console"
+      - "traefik.http.services.outline-minio-console.loadbalancer.server.port=9001"
+volumes:
+  storage:
+  database:
+networks:
+  default:
+  traefik_default:
+    external: true
