@@ -2,7 +2,7 @@
 
 ![Architecture](architecture.png?raw=true)
 
-## Maintainance
+## Maintenance
 
 | [Docs](https://github.com/dani-garcia/bitwarden_rs/wiki/Using-Docker-Compose) | [Releases](https://github.com/dani-garcia/bitwarden_rs/releases) |
 | --- | --- |

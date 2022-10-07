@@ -2,7 +2,7 @@
 
 ![Architecture](architecture.png?raw=true)
 
-## Maintainance
+## Maintenance
 
 | [Docs](https://caddyserver.com/docs/) | [Releases](https://github.com/caddyserver/caddy/releases) |
 | --- | --- |

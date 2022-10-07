@@ -2,7 +2,7 @@
 
 ![Architecture](architecture.png?raw=true)
 
-## Maintainance
+## Maintenance
 
 | [Docs](https://github.com/matrix-org/synapse/tree/develop/contrib/docker) | [Releases](https://github.com/matrix-org/synapse/releases) |
 | --- | --- |

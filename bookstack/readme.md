@@ -2,7 +2,7 @@
 
 ![Architecture](architecture.png?raw=true)
 
-## Maintainance
+## Maintenance
 
 | [Docs](https://www.bookstackapp.com/docs/) | [Releases](https://github.com/BookStackApp/BookStack/releases) | [Docker Repo](https://github.com/linuxserver/docker-bookstack) |
 | --- | --- | --- |

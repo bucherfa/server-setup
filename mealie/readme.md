@@ -2,7 +2,7 @@
 
 ![Architecture](architecture.png?raw=true)
 
-## Maintainance
+## Maintenance
 
 | [Docs](https://hay-kot.github.io/mealie/documentation/getting-started/introduction/) | [Releases](https://github.com/hay-kot/mealie/releases) |
 | --- | --- |
