@@ -9,7 +9,7 @@
 
 ### Updating
 
-nothing speacial
+nothing special
 
 ```bash
 docker-compose pull

@@ -9,7 +9,7 @@
 
 ### Upgrading
 
-nothing speacial to look out for
+nothing special to look out for
 
 ```bash
 docker-compose pull

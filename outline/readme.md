@@ -9,7 +9,7 @@
 
 ### Updating
 
-nothing speacial
+nothing special
 
 ```bash
 # update version numbers in docker-compose.yml
