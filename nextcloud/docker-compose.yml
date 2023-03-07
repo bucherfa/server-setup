@@ -19,7 +19,7 @@ services:
     networks:
       - default
   app:
-    image: nextcloud:24-apache
+    image: nextcloud:25-apache
     restart: always
     volumes:
       - data:/var/www/html
@@ -48,7 +48,7 @@ services:
       - "traefik.http.middlewares.nc_redirect.redirectregex.regex=/.well-known/(card|cal)dav"
       - "traefik.http.middlewares.nc_redirect.redirectregex.replacement=/remote.php/dav/"
   cron:
-    image: nextcloud:24-apache
+    image: nextcloud:25-apache
     restart: always
     volumes:
       - data:/var/www/html
