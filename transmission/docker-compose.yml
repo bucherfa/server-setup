@@ -2,7 +2,6 @@ version: "2.1"
 services:
   transmission:
     image: linuxserver/transmission
-    container_name: transmission
     environment:
       - PUID=1000
       - PGID=1000
@@ -28,7 +27,6 @@ services:
       - traefik_default
   nginx:
     image: nginx:stable
-    container_name: nginx
     volumes:
       - ./download.conf:/etc/nginx/conf.d/download.conf
       - downloads:/var/www/downloads:ro
