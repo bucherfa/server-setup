@@ -6,3 +6,4 @@ traefik/acme.json
 .logs
 caddy/Caddyfile
 .trash
+*.zip

@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  foundry:
+    image: felddy/foundryvtt:11.313
+    hostname: foundryvtt
+#    init: true
+    restart: always
+    volumes:
+      - data:/data
+    environment:
+      - FOUNDRY_LICENSE_KEY=${FOUNDRY_LICENSE_KEY}
+      - FOUNDRY_ADMIN_KEY=${FOUNDRY_ADMIN_KEY}
+      - CONTAINER_PRESERVE_CONFIG=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.foundryvtt.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.foundryvtt.entrypoints=websecure"
+      - "traefik.http.routers.foundryvtt.tls=true"
+    networks:
+      - traefik_default
+volumes:
+  data:
+networks:
+  traefik_default:
+    external: true
