@@ -1,7 +1,7 @@
 version: "3"
 services:
   synapse:
-    image: docker.io/matrixdotorg/synapse:v1.84.0
+    image: docker.io/matrixdotorg/synapse:v1.121.1
     restart: always
     # See the readme for a full documentation of the environment settings
     environment:
@@ -35,7 +35,7 @@ services:
     networks:
       - default
   synapse-admin:
-    image: awesometechnologies/synapse-admin:0.8.7
+    image: awesometechnologies/synapse-admin:0.10.3
     restart: always
     labels:
       - "traefik.enable=true"
