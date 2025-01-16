@@ -1,16 +1,19 @@
 version: "3.7"
 services:
   foundry:
-    image: felddy/foundryvtt:11.313
+    image: felddy/foundryvtt:12.331
     hostname: foundryvtt
 #    init: true
     restart: always
     volumes:
       - data:/data
+#      - ./mount:/host-mount
     environment:
       - FOUNDRY_LICENSE_KEY=${FOUNDRY_LICENSE_KEY}
       - FOUNDRY_ADMIN_KEY=${FOUNDRY_ADMIN_KEY}
+      - FOUNDRY_RELEASE_URL=${FOUNDRY_RELEASE_URL}
       - CONTAINER_PRESERVE_CONFIG=true
+      - FOUNDRY_PROXY_SSL=true
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_default"
@@ -24,3 +27,4 @@ volumes:
 networks:
   traefik_default:
     external: true
+
