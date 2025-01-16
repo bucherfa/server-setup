@@ -1,0 +1,32 @@
+version: "3"
+services:
+  front:
+    image: tombursch/kitchenowl-web:v0.6.4
+    networks:
+      - default
+      - traefik_default
+    restart: unless-stopped
+    depends_on:
+      - back
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.kitchenowl.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.kitchenowl.entrypoints=websecure"
+      - "traefik.http.routers.kitchenowl.tls=true"
+  back:
+    image: tombursch/kitchenowl:v0.6.4
+    networks:
+      - default
+    restart: unless-stopped
+    environment:
+      - FRONT_URL=https://${APP_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    volumes:
+      - data:/data
+networks:
+  default:
+  traefik_default:
+    external: true
+volumes:
+  data:
