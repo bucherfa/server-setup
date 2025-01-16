@@ -1,9 +1,7 @@
 version: "3"
 services:
   app:
-    image: vaultwarden/server:1.25.2
-    ports:
-      - ${APP_PORT}:80
+    image: vaultwarden/server:1.32.1
     restart: always
     volumes:
       - data:/data
@@ -16,7 +14,7 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SHOW_PASSWORD_HINT=${SHOW_PASSWORD_HINT}
       - SMTP_PORT=${SMTP_PORT}
-      - SMTP_SSL=${SMTP_SSL}
+      - SMTP_SECURITY=${SMTP_SECURITY}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_default"
