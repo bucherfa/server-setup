@@ -1,0 +1,24 @@
+version: "3"
+services:
+  app:
+    image: ghcr.io/advplyr/audiobookshelf:2.30.0
+    restart: always
+    volumes:
+      - ./audiobooks:/audiobooks
+      - ./podcasts:/podcasts
+      - ./config:/config
+      - ./metadata:/metadata
+    environment:
+      - TZ=Europe/Berlin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+      - "traefik.http.routers.audiobookshelf.rule=Host(`${APP_URL}`)"
+      - "traefik.http.routers.audiobookshelf.entrypoints=websecure"
+      - "traefik.http.routers.audiobookshelf.tls=true"
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
+    networks:
+      - traefik_default
+networks:
+  traefik_default:
+    external: true
