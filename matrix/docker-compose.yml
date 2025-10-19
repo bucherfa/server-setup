@@ -1,7 +1,7 @@
 version: "3"
 services:
   synapse:
-    image: docker.io/matrixdotorg/synapse:v1.121.1
+    image: docker.io/matrixdotorg/synapse:v1.140.0
     restart: always
     # See the readme for a full documentation of the environment settings
     environment:
@@ -22,7 +22,7 @@ services:
       - default
       - traefik_default
   db:
-    image: docker.io/postgres:12-alpine
+    image: docker.io/postgres:18-alpine
     restart: always
     environment:
       - POSTGRES_USER=synapse
@@ -31,11 +31,12 @@ services:
       # https://github.com/matrix-org/synapse/blob/master/docs/postgres.md#set-up-database
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
     volumes:
-      - db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql
+      #- ./dumps:/docker-entrypoint-initdb.d
     networks:
       - default
   synapse-admin:
-    image: awesometechnologies/synapse-admin:0.10.3
+    image: awesometechnologies/synapse-admin:0.11.1
     restart: always
     labels:
       - "traefik.enable=true"
