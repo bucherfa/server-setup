@@ -8,3 +8,5 @@ caddy/Caddyfile
 .trash
 *.zip
 backups/
+*.sql
+
